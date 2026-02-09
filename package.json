@@ -1,6 +1,6 @@
 {
   "name": "@hak2i/aiwf",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "AI Workflow Framework for repeatable, logged, multi-stage generation pipelines.",
   "private": false,
   "keywords": [

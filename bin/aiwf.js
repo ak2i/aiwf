@@ -23,6 +23,7 @@ Options:
   --name           Optional session name suffix
   --cwd            Working directory for the command
   --tools-path     Tools registry file (default: ~/.aiwf/tools.json)
+  --spec-stack     Comma-separated spec stack identifiers
   --help           Show help
   --version        Show version
 `;
@@ -44,6 +45,7 @@ function parseArgs(argv) {
     name: null,
     cwd: process.cwd(),
     toolsPath: defaultToolsPath(),
+    specStack: null,
     help: false,
     version: false
   };
@@ -73,6 +75,8 @@ function parseArgs(argv) {
       opts.cwd = argv[++i] || opts.cwd;
     } else if (arg === '--tools-path') {
       opts.toolsPath = argv[++i] || opts.toolsPath;
+    } else if (arg === '--spec-stack') {
+      opts.specStack = argv[++i] || null;
     } else if (!command) {
       command = arg;
     } else if (afterDoubleDash) {
@@ -97,12 +101,23 @@ function runCommand(opts) {
   const stdoutPath = path.join(session.artifactsDir, 'stdout.txt');
   const stderrPath = path.join(session.artifactsDir, 'stderr.txt');
 
+  const argv = opts.argv || [];
+  const runPatch = {
+    tool: opts.toolName || 'cmd',
+    argv,
+    started_at: new Date().toISOString()
+  };
+  if (opts.specStack) {
+    runPatch.spec_stack = opts.specStack.split(',').map((s) => s.trim()).filter(Boolean);
+  }
   updateRun(session.runPath, {
     command: opts.cmd,
-    cwd: opts.cwd
+    cwd: opts.cwd,
+    ...runPatch
   });
 
-  appendEvent(eventsPath, { ts: new Date().toISOString(), type: 'start', cmd: opts.cmd });
+  appendEvent(eventsPath, { ts: new Date().toISOString(), type: 'session_start' });
+  appendEvent(eventsPath, { ts: new Date().toISOString(), type: 'tool_start', tool: opts.toolName || 'cmd', argv });
 
   const child = spawn(opts.cmd, {
     shell: true,
@@ -117,16 +132,18 @@ function runCommand(opts) {
     const text = data.toString();
     stdoutStream.write(text);
     appendEvent(eventsPath, { ts: new Date().toISOString(), type: 'stdout', data: text });
+    appendEvent(eventsPath, { ts: new Date().toISOString(), type: 'artifact_written', path: stdoutPath });
   });
 
   child.stderr.on('data', (data) => {
     const text = data.toString();
     stderrStream.write(text);
     appendEvent(eventsPath, { ts: new Date().toISOString(), type: 'stderr', data: text });
+    appendEvent(eventsPath, { ts: new Date().toISOString(), type: 'artifact_written', path: stderrPath });
   });
 
   child.on('close', (code) => {
-    appendEvent(eventsPath, { ts: new Date().toISOString(), type: 'exit', code });
+    appendEvent(eventsPath, { ts: new Date().toISOString(), type: 'tool_end', code });
     updateRun(session.runPath, {
       finished_at: new Date().toISOString(),
       exit_code: code
@@ -158,7 +175,12 @@ function main() {
         return process.exit(2);
       }
       const args = rest.join(' ');
-      return runCommand({ ...opts, cmd: `${tool.cmd} ${args}`.trim() });
+      return runCommand({
+        ...opts,
+        cmd: `${tool.cmd} ${args}`.trim(),
+        toolName: opts.tool,
+        argv: rest
+      });
     }
     return runCommand(opts);
   }

@@ -20,10 +20,15 @@ Each run creates a new session folder:
 ## Files
 
 - `run.json`
-  - Session metadata (start time, command, cwd, exit code)
+  - Session metadata (tool, argv, started_at, spec_stack, command, cwd, exit code)
 
 - `events.jsonl`
-  - Line-delimited JSON events (start, stdout, stderr, exit)
+  - Line-delimited JSON events
+  - Minimal event types (v0.1.1):
+    - `session_start`
+    - `tool_start`
+    - `artifact_written`
+    - `tool_end`
 
 - `artifacts/stdout.txt`
   - Captured stdout

@@ -32,8 +32,7 @@ function createSession(rootDir, name) {
 
   const runPath = path.join(sessionDir, 'run.json');
   const run = {
-    session_id: id,
-    started_at: new Date().toISOString()
+    session_id: id
   };
   fs.writeFileSync(runPath, JSON.stringify(run, null, 2) + '\n', 'utf8');
 

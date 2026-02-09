@@ -18,6 +18,12 @@ aiwf tool add flowmark --cmd "flowmark"
 aiwf run --tool flowmark -- validate docs/dev/v0.1.2/samples/minimal.md
 ```
 
+With spec stack:
+
+```bash
+aiwf run --tool flowmark --spec-stack v0.1,v0.1.1,v0.1.2 -- validate docs/dev/v0.1.2/samples/minimal.md
+```
+
 List tools:
 
 ```bash
@@ -52,7 +58,7 @@ MIT
 
 ```bash
 npm pack
-tar -tf hak2i-aiwf-0.1.0.tgz
+tar -tf hak2i-aiwf-0.1.1.tgz
 ```
 
 Check that `bin/`, `src/`, `docs/`, `README.md`, and `LICENSE` are included.
