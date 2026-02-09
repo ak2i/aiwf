@@ -21,6 +21,7 @@ Each run creates a new session folder:
 
 - `run.json`
   - Session metadata (tool, argv, started_at, spec_stack, command, cwd, exit code)
+  - Optional `participants`: list of `{ name, role }`
 
 - `events.jsonl`
   - Line-delimited JSON events

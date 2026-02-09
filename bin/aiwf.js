@@ -24,6 +24,7 @@ Options:
   --cwd            Working directory for the command
   --tools-path     Tools registry file (default: ~/.aiwf/tools.json)
   --spec-stack     Comma-separated spec stack identifiers
+  --participant    Participant (name:role), repeatable
   --help           Show help
   --version        Show version
 `;
@@ -46,6 +47,7 @@ function parseArgs(argv) {
     cwd: process.cwd(),
     toolsPath: defaultToolsPath(),
     specStack: null,
+    participants: [],
     help: false,
     version: false
   };
@@ -77,6 +79,9 @@ function parseArgs(argv) {
       opts.toolsPath = argv[++i] || opts.toolsPath;
     } else if (arg === '--spec-stack') {
       opts.specStack = argv[++i] || null;
+    } else if (arg === '--participant') {
+      const value = argv[++i] || '';
+      if (value) opts.participants.push(value);
     } else if (!command) {
       command = arg;
     } else if (afterDoubleDash) {
@@ -109,6 +114,15 @@ function runCommand(opts) {
   };
   if (opts.specStack) {
     runPatch.spec_stack = opts.specStack.split(',').map((s) => s.trim()).filter(Boolean);
+  }
+  if (opts.participants && opts.participants.length > 0) {
+    runPatch.participants = opts.participants.map((p) => {
+      const [name, role] = p.split(':');
+      return {
+        name: (name || '').trim(),
+        role: (role || '').trim()
+      };
+    }).filter((p) => p.name);
   }
   updateRun(session.runPath, {
     command: opts.cmd,

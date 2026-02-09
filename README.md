@@ -24,6 +24,12 @@ With spec stack:
 aiwf run --tool flowmark --spec-stack v0.1,v0.1.1,v0.1.2 -- validate docs/dev/v0.1.2/samples/minimal.md
 ```
 
+With participants:
+
+```bash
+aiwf run --tool flowmark --participant "llm:responder" --participant "human:actor" -- validate docs/dev/v0.1.2/samples/minimal.md
+```
+
 List tools:
 
 ```bash
@@ -58,7 +64,7 @@ MIT
 
 ```bash
 npm pack
-tar -tf hak2i-aiwf-0.1.1.tgz
+tar -tf hak2i-aiwf-0.1.2.tgz
 ```
 
 Check that `bin/`, `src/`, `docs/`, `README.md`, and `LICENSE` are included.
