@@ -1,0 +1,32 @@
+{
+  "name": "@hak2i/aiwf",
+  "version": "0.1.0",
+  "description": "AI Workflow Framework for repeatable, logged, multi-stage generation pipelines.",
+  "private": false,
+  "keywords": [
+    "aiwf",
+    "workflow",
+    "ai",
+    "pipeline"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ak2i/aiwf.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ak2i/aiwf/issues"
+  },
+  "homepage": "https://github.com/ak2i/aiwf#readme",
+  "license": "MIT",
+  "type": "commonjs",
+  "files": [
+    "bin/",
+    "src/",
+    "docs/",
+    "README.md",
+    "LICENSE"
+  ],
+  "bin": {
+    "aiwf": "bin/aiwf.js"
+  }
+}
