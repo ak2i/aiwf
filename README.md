@@ -47,6 +47,17 @@ See `docs/sessions.md` for details.
 
 See `docs/tools.md` for the tools registry format.
 
+## v0.1.3 CLI (partial)
+
+```bash
+aiwf session new
+aiwf session list --format json
+aiwf material add ./docs/spec.md --type file
+aiwf material set create --include material_20260212_120000_abcd
+aiwf catalog materials --format table
+aiwf fetch material:material_20260212_120000_abcd --format json --pretty
+```
+
 ## Exit Codes
 
 - `0` : command succeeded

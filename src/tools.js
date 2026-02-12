@@ -22,9 +22,9 @@ function saveTools(toolsPath, tools) {
   fs.writeFileSync(toolsPath, JSON.stringify(payload, null, 2) + '\n', 'utf8');
 }
 
-function setTool(name, cmd, toolsPath = defaultToolsPath()) {
+function setTool(name, tool, toolsPath = defaultToolsPath()) {
   const { tools } = loadTools(toolsPath);
-  tools[name] = { cmd };
+  tools[name] = { ...(tools[name] || {}), ...tool };
   saveTools(toolsPath, tools);
 }
 
@@ -38,11 +38,20 @@ function getTool(name, toolsPath = defaultToolsPath()) {
   return tools[name] || null;
 }
 
+function deleteTool(name, toolsPath = defaultToolsPath()) {
+  const { tools } = loadTools(toolsPath);
+  if (!tools[name]) return false;
+  delete tools[name];
+  saveTools(toolsPath, tools);
+  return true;
+}
+
 module.exports = {
   defaultToolsPath,
   loadTools,
   saveTools,
   setTool,
   listTools,
-  getTool
+  getTool,
+  deleteTool
 };
