@@ -45,3 +45,14 @@ Each run creates a new session folder:
 - Session names are timestamp-based.
 - `--session-root` can override the default root.
 - `--tools-path` can override the default tools registry file.
+
+## Commands (v0.1.3)
+
+```bash
+aiwf session new
+aiwf session list --format json
+aiwf session attach <id>
+aiwf session detach
+aiwf session archive <id>
+aiwf session remove <id> --hard
+```

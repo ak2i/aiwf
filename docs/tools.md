@@ -14,6 +14,12 @@ Register a tool:
 aiwf tool add flowmark --cmd "flowmark"
 ```
 
+Register from a manifest:
+
+```bash
+aiwf tool add ./tool-manifest.json
+```
+
 Run with the tool:
 
 ```bash
@@ -31,7 +37,15 @@ Example output:
 ```json
 {
   "flowmark": {
-    "cmd": "flowmark"
+    "tool_id": "flowmark",
+    "cmd": "flowmark",
+    "invocation_type": "command",
+    "capabilities": [],
+    "request_model": "unknown",
+    "compliance": "unknown",
+    "execution_environment": "local",
+    "adapter_required": false,
+    "adapter_notes": ""
   }
 }
 ```
@@ -42,6 +56,7 @@ Example output:
 {
   "tools": {
     "flowmark": {
+      "tool_id": "flowmark",
       "cmd": "flowmark"
     }
   }
